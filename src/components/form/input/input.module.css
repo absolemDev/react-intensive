@@ -8,7 +8,19 @@
   margin-bottom: 0.5rem;
 }
 
+.inputGroup {
+  display: flex;
+}
+
 .textField {
+  padding: 0.5rem;
+  flex-grow: 1;
+}
+
+.submit {
+  display: block;
+  width: 50%;
+  margin: auto;
   padding: 0.5rem;
 }
 

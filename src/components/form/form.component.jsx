@@ -1,56 +1,44 @@
 import React from "react";
 import { Submit, TextField } from "./input";
-import style from "./form.module.css";
+import { List } from "../list";
 
 class Form extends React.Component {
   constructor() {
     super();
-    this.state = { firstName: "", lastName: "" };
+    this.state = { element: "", elementList: [], isDisabled: true };
     this.handleChange = this.handleChange.bind(this);
-  }
-
-  componentDidMount() {
-    console.log("Form did mount");
-  }
-
-  componentDidUpdate() {
-    console.log("Form did update");
-  }
-
-  componentWillUnmount() {
-    console.log("Form will unmount");
+    this.submitHandler = this.submitHandler.bind(this);
   }
 
   handleChange(event) {
-    this.setState({ [event.target.name]: event.target.value });
+    const isDisabled =
+      !event.target.value || !!event.target.value.match(/(^|\s)реакт($|\s)/i);
+    this.setState({ [event.target.name]: event.target.value, isDisabled });
   }
 
   submitHandler(event) {
     event.preventDefault();
-    alert(
-      `${this.state.firstName}${
-        this.state.lastName ? " " + this.state.lastName : ""
-      }, приветствуем тебя на React Интенсиве!`
-    );
+    this.setState((prevState) => ({
+      elementList: [...prevState.elementList, prevState.element],
+      element: "",
+      isDisabled: true,
+    }));
   }
 
   render() {
     return (
-      <form onSubmit={this.submitHandler.bind(this)} className={style.form}>
-        <TextField
-          name="firstName"
-          label="Имя"
-          value={this.state.firstName}
-          onChange={this.handleChange}
-        />
-        <TextField
-          name="lastName"
-          label="Фамилия"
-          value={this.state.lastName}
-          onChange={this.handleChange}
-        />
-        <Submit disabled={!this.state.firstName} />
-      </form>
+      <>
+        <form onSubmit={this.submitHandler}>
+          <TextField
+            name="element"
+            label="Элемент списка"
+            value={this.state.element}
+            onChange={this.handleChange}
+          />
+          <Submit disabled={this.state.isDisabled} />
+        </form>
+        <List elementList={this.state.elementList} />
+      </>
     );
   }
 }
